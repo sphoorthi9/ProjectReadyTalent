@@ -1,0 +1,9 @@
+trigger TrainingProgramApprovalTrigger on Training_Program__c (before update) {
+    for (Training_Program__c program : Trigger.new) {
+        if (program.Approval_Request__c == true) {
+            program.Approval_Status__c = 'Approved'; 
+        } else if (program.Approval_Request__c == false && program.Approval_Status__c != 'Rejected') {
+            program.Approval_Status__c = 'Pending'; 
+    }
+}
+}

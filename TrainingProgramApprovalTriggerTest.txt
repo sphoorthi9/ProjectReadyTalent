@@ -1,0 +1,39 @@
+@isTest
+public class TrainingProgramApprovalTriggerTest {
+    @isTest
+    static void testApprovalStatus() {
+        // Create a test training program
+        Training_Program__c testProgram = new Training_Program__c();
+        testProgram.Name = 'Test Program';
+        testProgram.Approval_Request__c = false; 
+        insert testProgram;
+
+        // Update the program to mark it as approved
+        testProgram.Approval_Request__c = true; 
+        update testProgram;
+
+        // Retrieve the updated record
+        Training_Program__c updatedProgram = [SELECT Id, Approval_Status__c FROM Training_Program__c WHERE Id = :testProgram.Id];
+        
+        // Assert that the approval status is set correctly
+        System.assertEquals('Approved', updatedProgram.Approval_Status__c, 'The approval status should be set to Approved');
+        
+        // Test for pending status
+        testProgram.Approval_Request__c = false; 
+        update testProgram;
+        updatedProgram = [SELECT Id, Approval_Status__c FROM Training_Program__c WHERE Id = :testProgram.Id];
+        System.assertEquals('Pending', updatedProgram.Approval_Status__c, 'The approval status should be set to Pending');
+        
+        // Test for rejected status
+        testProgram.Approval_Status__c = 'Rejected'; 
+        update testProgram;
+        updatedProgram = [SELECT Id, Approval_Status__c FROM Training_Program__c WHERE Id = :testProgram.Id];
+        System.assertEquals('Rejected', updatedProgram.Approval_Status__c, 'The approval status should be set to Rejected');
+
+        // Test for draft status
+        testProgram.Approval_Status__c = 'Draft'; 
+        update testProgram;
+        updatedProgram = [SELECT Id, Approval_Status__c FROM Training_Program__c WHERE Id = :testProgram.Id];
+        System.assertEquals('Draft', updatedProgram.Approval_Status__c, 'The approval status should be set to Draft');
+    }
+}

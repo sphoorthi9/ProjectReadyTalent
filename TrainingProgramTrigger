@@ -1,0 +1,5 @@
+trigger TrainingProgramTrigger on Training_Program__c (before insert) {
+    for (Training_Program__c program : Trigger.new) {
+        program.Approval_Status__c = 'Pending Approval'; 
+    }
+}

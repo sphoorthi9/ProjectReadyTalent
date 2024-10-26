@@ -1,0 +1,12 @@
+@isTest
+public class TrainingProgramTriggerTest {
+    @isTest
+    static void testTrigger() {
+        Training_Program__c testProgram = new Training_Program__c();
+        testProgram.Name = 'Test Program'; 
+        testProgram.Approval_Status__c = 'Draft'; 
+        insert testProgram;   
+        Training_Program__c insertedProgram = [SELECT Id, Approval_Status__c FROM Training_Program__c WHERE Id = :testProgram.Id];  
+        System.assertEquals('Pending Approval', insertedProgram.Approval_Status__c, 'The status should be set to Pending Approval');
+    }
+}
